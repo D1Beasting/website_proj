@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang = "en">
+  <head>
+    <meta charset="utf-8">
+    <title>My dashboard</title>
+    <meta name="viewport" content="width=device-width">
+
+    <!-- Add the CSS styles for the dashboard -->
+    <style>
+      body {
+        background-color: aquamarine;
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      
+      header {
+        background-color: #333;
+        color: #fff;
+        padding: 20px;
+      }
+      
+      nav {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+      }
+      
+      nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      
+      nav li {
+        display: inline-block;
+        padding: 10px;
+      }
+      
+      main {
+        padding: 20px;
+      }
+      
+      .card {
+        border: 1px solid #ccc;
+        margin: 20px 0;
+        padding: 20px;
+        width: 300px;
+      }
+      
+      footer {
+        position: absolute;
+        bottom: 0;
+        width: 95%;
+        background-color: #333;
+        color: #fff;
+        padding: 20px;
+      }
+
+      /*rain drop (effects/style)*/
+      .drop {
+        width: 10px;
+        height: 20px;
+        background-color: white;
+        position: absolute;
+        animation: fall 1s infinite;
+      }
+      /*This is used to specify values in the animation*/
+      @keyframes fall {
+        0% {
+          transform: translateY(0%);
+        }
+        100% {
+          transform: translateY(100%);
+        }
+        
+      }
+      #snowContainer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .snowflake {
+        position: absolute;
+        font-size: 20px;
+        color: white;
+        text-shadow: 0 0 10px white;
+        user-select: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>WeatherTopia</h1>
+    </header>
+    
+    <div id="card">
+        
+    </div> 
+<!-- This is an api call to Openweather to get current temp for specific area -->
+    <script>
+      snowfall();
+      const apiKey = '346a81892bbe5bb8c600f05276b6e3ad';
+      const city = 'Spencer, Iowa';
+      const units = 'imperial'; 
+
+      async function getWeather() 
+      {
+        console.log("fetching.....");
+        try{
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${units}&appid=${apiKey}`);
+        const data = await response.json();
+        // do an event with the given temperature and weather involved
+        
+        const icon = data.weather[0].icon;    
+        const element = document.getElementById('card');
+        element.style.position = 'absolute';
+        element.style.top = '50%';
+        element.style.left = '50%';
+        element.style.transform = 'translate(-50%, -50%)';
+        element.innerHTML = `The current temperature in ${city} is ${data.main.temp} degrees Farenheight. <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="Weather icon">`;
+        // Update rain effect based on weather data
+        if (data.weather[0].main === "rain"/* || "thunderstorm"*/ ) {
+            // Create rain container and append to body
+            var rainContainer = document.createElement("div");
+            rainContainer.setAttribute("id", "rain");
+            document.body.appendChild(rainContainer);
+
+            // Start raining
+            setInterval(createDrop, 50);
+          } else {
+            // Stop raining
+            clearInterval();
+            // Remove rain container from body
+            var rainContainer = document.getElementById("rain");
+            rainContainer.parentNode.removeChild(rainContainer);
+          }
+           } catch(error)
+             {
+                console.log(error);
+             }
+        console.log("......fetched!");
+      } 
+      getWeather();
+      /*a new div element is created for each raindrop, and the .drop class is added to the element using the classList.add method.
+       This applies the styles defined in the .drop class to the raindrop element,
+        causing it to be displayed on the page according to those styles.
+      */
+      function createDrop() {
+        var drop = document.createElement("div");
+        drop.classList.add("drop");
+        var x = Math.floor(Math.random() * window.innerWidth);
+        drop.style.left = x + "px";
+        document.getElementById("rain").appendChild(drop);
+      }
+      function snowfall() {
+      // Create a container element for the snowflakes
+      let snowContainer = document.createElement("div");
+      snowContainer.id = "snowContainer";
+      document.body.appendChild(snowContainer);
+  
+      // Create the snowflake elements
+      for (let i = 0; i < 50; i++) {
+        let snowflake = document.createElement("div");
+        snowflake.classList.add("snowflake");
+        snowflake.innerHTML = "❄"; // snowflake character
+        snowContainer.appendChild(snowflake);
+      }
+  
+      // Animate the snowflakes
+      let snowflakes = document.getElementsByClassName("snowflake");
+      setInterval(() => {
+        for (let i = 0; i < snowflakes.length; i++) {
+          let snowflake = snowflakes[i];
+          let x = Math.floor(Math.random() * window.innerWidth);
+          let y = Math.floor(Math.random() * window.innerHeight);
+          snowflake.style.left = x + "px";
+          snowflake.style.top = y + "px";
+        }
+      }, 200);
+    }
+
+
+    </script>
+    
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Profile</a></li>
+      </ul>
+     <!-- 
+      <form>
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="search">
+        <button type="submit">Search</button>
+      </form>
+    </nav>
+  -->
+<!--
+    <div class="card">
+      <h1>Card Title</h1>
+      <p>Some content goes here...</p>
+    </div>
+  -->   
+    <footer>
+      WeatherTopia Inc. @Copyright 2022
+    </footer>
+
+    <main></main>
+  </body>
+</html>
+    
