@@ -59,7 +59,7 @@
 
       /*rain drop (effects/style)*/
       .drop {
-        width: 10px;
+        width: 5px;
         height: 20px;
         background-color: white;
         position: absolute;
@@ -160,7 +160,9 @@
         var drop = document.createElement("div");
         drop.classList.add("drop");
         var x = Math.floor(Math.random() * window.innerWidth);
+        let y = Math.floor(Math.random() * window.innerHeight);
         drop.style.left = x + "px";
+        drop.style.top = y + "px";
         document.getElementById("rain").appendChild(drop);
       }
       function snowfall() {
