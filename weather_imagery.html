@@ -103,9 +103,9 @@
     </div> 
 <!-- This is an api call to Openweather to get current temp for specific area -->
     <script>
-      snowfall();
+      //snowfall();
       const apiKey = '346a81892bbe5bb8c600f05276b6e3ad';
-      const city = 'Spencer, Iowa';
+      const city = 'Ottawa';
       const units = 'imperial'; 
 
       async function getWeather() 
@@ -123,8 +123,10 @@
         element.style.left = '50%';
         element.style.transform = 'translate(-50%, -50%)';
         element.innerHTML = `The current temperature in ${city} is ${data.main.temp} degrees Farenheight. <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="Weather icon">`;
-        // Update rain effect based on weather data
-        if (data.weather[0].main === "rain"/* || "thunderstorm"*/ ) {
+        const check = data.weather[0].main;
+        console.log(check);
+        //Update rain effect based on weather data
+        if (data.weather[0].main === "rain" || "thunderstorm" ) {
             // Create rain container and append to body
             var rainContainer = document.createElement("div");
             rainContainer.setAttribute("id", "rain");
@@ -138,6 +140,10 @@
             // Remove rain container from body
             var rainContainer = document.getElementById("rain");
             rainContainer.parentNode.removeChild(rainContainer);
+          }
+          if(data.weather[0].icon === "13n.png ")
+          {
+            snowfall();
           }
            } catch(error)
              {
