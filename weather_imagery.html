@@ -105,7 +105,7 @@
     <script>
       //snowfall();
       const apiKey = '346a81892bbe5bb8c600f05276b6e3ad';
-      const city = 'Ottawa';
+      const city = 'Franklin, Indiana';
       const units = 'imperial'; 
 
       async function getWeather() 
@@ -126,7 +126,7 @@
         const check = data.weather[0].main;
         console.log(check);
         //Update rain effect based on weather data
-        if (data.weather[0].main === "rain" || "thunderstorm" ) {
+        if (data.weather[0].main === "Rain" || data.weather[0].main === "Drizzle" || data.weather[0].main === "Thunderstorm" || "clear") {
             // Create rain container and append to body
             var rainContainer = document.createElement("div");
             rainContainer.setAttribute("id", "rain");
@@ -141,15 +141,15 @@
             var rainContainer = document.getElementById("rain");
             rainContainer.parentNode.removeChild(rainContainer);
           }
-          if(data.weather[0].icon === "13n.png ")
-          {
-            snowfall();
-          }
-           } catch(error)
-             {
-                console.log(error);
-             }
-        console.log("......fetched!");
+        if(data.weather[0].icon === "13n.png ")
+        {
+          snowfall();
+        }
+          } catch(error)
+            {
+              console.log(error);
+            }
+      console.log("......fetched!");
       } 
       getWeather();
       /*a new div element is created for each raindrop, and the .drop class is added to the element using the classList.add method.
